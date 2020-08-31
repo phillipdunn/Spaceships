@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaceships</title>
+<style>
+    body {
+		background-image: url(https://www.gstatic.com/earth/social/00_generic_facebook-001.jpg);
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+		background-size: cover;
+        }
+    .flex-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    .ship-box {
+	    display: flex;
+	    flex-direction: column;
+        justify-content: center;
+        align-items: center;
+	    height: 90px;
+	    width: 90px;
+	    margin: 5px;
+        margin-top: 20px;
+        }  
+    .ship-box > p {
+        font-size: 20px;  
+        font-style: bold;
+        color:red;
+        }
+    img {
+        height: 80px;
+		width: 80px;
+	    }
+    button {
+		background-color: red;
+		color: white;
+        height:35px;
+        width:70px;
+        margin: 20px;
+        margin-top: 50px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .modal {
+        display: none; 
+        position: fixed; 
+        z-index: 1; 
+        left: 0;
+        top: 0;
+        width: 90%; 
+        height: 70%;
+        margin-top:10%;
+        overflow: auto; 
+        background-color: #421558(0,0,0,0.4);
+        text-align: center;
+    }
+    .modal-content {
+        background-color: blue;
+        margin: auto;
+        border-radius: 20px;
+        height: 20%;
+        width: 68%;
+        color: white;
+        font-size: 26px;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+    <section class="flex-box">
+        <div class="ship-box" id="ship0"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="0"></p></div>
+    </section>
+    <section class="flex-box">
+        <div class="ship-box" id="ship1"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="1"></p></div>
+        <div class="ship-box" id="ship2"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="2"></p></div>
+        <div class="ship-box" id="ship3"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="3"></p></div>
+        <div class="ship-box" id="ship4"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="4"></p></div>
+        <div class="ship-box" id="ship5"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="5"></p></div>
+    </section>
+    <section class="flex-box">
+        <div class="ship-box" id="ship6"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="6"></p></div>
+        <div class="ship-box" id="ship7"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="7"></p></div>
+        <div class="ship-box" id="ship8"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="8"></p></div>
+        <div class="ship-box" id="ship9"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="9"></p></div>
+        <div class="ship-box" id="ship10"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="10"></p></div>
+        <div class="ship-box" id="ship11"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="11"></p></div>
+        <div class="ship-box" id="ship12"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="12"></p></div>
+        <div class="ship-box" id="ship13"><img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2015/08/ufo-spaceship.png?w=600" alt=""><p id="13"></p></div>
+    </section>
+    <section class="flex-box">
+        <button id="fire" type="button" onclick="buttonClicked()">Fire</button>
+        <button id="reset" onClick="window.location.reload();">Reset</button>
+    </section> 
+    <section id="modal" class="modal">
+        <div class="modal-content">
+        <p id="modal-text"></p>
+        </div>
+    </section>  
+ <script>
+    let spaceShips = [];
+    let gameOver = false;
+    let deadShips = 0;
+    const modal = document.getElementById('modal');
+    const modalText = document.getElementById('modal-text');
+    class Spaceship {
+        constructor (hp, shipType, deductHp ){
+            this.hp = hp;
+            this.shipType = shipType;
+            this.deductHp = deductHp;     
+        }
+        updateScore() {
+		    if(this.hp === 0){
+		        fire();
+		    } else {
+                this.hp = this.hp - this.deductHp;
+                if (this.hp < 1){
+		            this.hp = 0;
+	                deadShips = deadShips + 1;
+                    if (this.shipType === "Mothership" || deadShips === 15) gameOver = true;
+                    if (gameOver ===true) 
+                    modal.style.display = "block";
+                    modalText.innerHTML = `Congratulations You Destroyed The Aliens`;
+                }
+            }
+		}   
+    }
+    buttonClicked = () => {
+		gameOver? makeSpaceShips() : fire();
+	};    
+    render = () => {
+		let currentIndex = 0;
+		spaceShips.forEach(ship => { 
+		    document.getElementById(currentIndex).textContent = ship.hp; console.log(ship.hp)
+				ship.hp === 0 ? document.getElementById("ship"+currentIndex).style.visibility ="hidden" : document.getElementById("ship"+currentIndex).style.visibility ="visible" ;
+				currentIndex++;
+			});
+	}  
+    fire = () => {
+        spaceShips[Math.round(Math.random() * 13)].updateScore(); 
+		render();
+	};
+    makeSpaceShips = () => {
+        spaceShips =  [];
+        gameOver = false;
+        deadShips = 0;
+        spaceShips.push(new Spaceship(100, "Mothership", 9));
+        for (let i = 0; i < 5; i++) { spaceShips.push(new Spaceship(80, "Defence", 10));}
+        for (let i = 0; i < 8; i++) { spaceShips.push(new Spaceship(45, "Attack", 12));} 
+        render()
+    }; 
+   makeSpaceShips();
+ </script>
+</body>
+</html>
